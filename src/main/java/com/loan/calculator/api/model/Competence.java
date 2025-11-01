@@ -20,7 +20,7 @@ public class Competence {
     private LocalDate dateCompetence;
     private long outstandingBalance;
     private long loanAmount;
-    private int type;
+    private CompetenceType type;
     private Installment installment;
     private Principal principal;
     private Feel feel;

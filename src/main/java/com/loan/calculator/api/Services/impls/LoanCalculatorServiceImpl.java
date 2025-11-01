@@ -2,10 +2,7 @@ package com.loan.calculator.api.Services.impls;
 
 import com.loan.calculator.api.Services.LoanCalculatorService;
 import com.loan.calculator.api.exeptions.AppException;
-import com.loan.calculator.api.model.Competence;
-import com.loan.calculator.api.model.Feel;
-import com.loan.calculator.api.model.Installment;
-import com.loan.calculator.api.model.Principal;
+import com.loan.calculator.api.model.*;
 import com.loan.calculator.api.payloads.RequestLoanCalculator;
 import com.loan.calculator.api.responses.LoanResponse;
 import com.loan.calculator.api.utils.GenerateDate;
@@ -19,7 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.loan.calculator.api.utils.AppConstants.*;
+import static com.loan.calculator.api.utils.AppConstants.MESSAGE_EXCEPTION_DATE_END;
+import static com.loan.calculator.api.utils.AppConstants.MESSAGE_EXCEPTION_DATE_START;
 
 @Service
 public class LoanCalculatorServiceImpl implements LoanCalculatorService {
@@ -61,13 +59,13 @@ public class LoanCalculatorServiceImpl implements LoanCalculatorService {
             competence.setPrincipal(principal);
             competence.setOutstandingBalance(doubleToLong(balance));
 
-            if (competence.getType() == 0) {
+            if (competence.getType() == CompetenceType.INITIAL_COMPETENCE) {
                 competence.setLoanAmount(requestLoanCalculator.getLoanAmount());
             } else {
                 competence.setLoanAmount(0);
             }
 
-            if (competence.getType() == 1) {
+            if (competence.getType() == CompetenceType.FEEL_PROVISION) {
                 LocalDate start = generateCompetencies.get(index - 1).getDateCompetence();
                 LocalDate end = generateCompetencies.get(index).getDateCompetence();
 
@@ -82,7 +80,7 @@ public class LoanCalculatorServiceImpl implements LoanCalculatorService {
 
             }
 
-            if (competence.getType() == 2) {
+            if (competence.getType() == CompetenceType.INSTALLMENT_PAYMENT) {
                 LocalDate start = generateCompetencies.get(index - 1).getDateCompetence();
                 LocalDate end = generateCompetencies.get(index).getDateCompetence();
 
@@ -127,7 +125,7 @@ public class LoanCalculatorServiceImpl implements LoanCalculatorService {
     }
 
     private long doubleToLong(double value) {
-        return Long.parseLong(String.format("%.2f", value).replace(",",""));
+        return Long.parseLong(String.format("%.2f", value).replace(",", ""));
     }
 
     private List<Competence> generateCompetencies(LocalDate startDate, LocalDate firstPayment, LocalDate endDate, int INSTALLMENTS) {
@@ -144,8 +142,8 @@ public class LoanCalculatorServiceImpl implements LoanCalculatorService {
             );
 
             var actualMaximum = generateDate.getActualMaximum(dayOfMonth);
-            competences.add(Competence.builder().dateCompetence(dayOfMonth).type(0).build());
-            competences.add(Competence.builder().dateCompetence(actualMaximum).type(1).build());
+            competences.add(Competence.builder().dateCompetence(dayOfMonth).type(CompetenceType.INITIAL_COMPETENCE).build());
+            competences.add(Competence.builder().dateCompetence(actualMaximum).type(CompetenceType.FEEL_PROVISION).build());
 
         }
 
@@ -162,19 +160,19 @@ public class LoanCalculatorServiceImpl implements LoanCalculatorService {
 
             competences.add(Competence.builder()
                     .dateCompetence(dayOfMonth)
-                    .type(2)
+                    .type(CompetenceType.INSTALLMENT_PAYMENT)
                     .installment(Installment.builder().number(installment + 1)
                             .build())
                     .build());
             if (installment != INSTALLMENTS - 1) {
-                competences.add(Competence.builder().dateCompetence(actualMaximum).type(1).build());
+                competences.add(Competence.builder().dateCompetence(actualMaximum).type(CompetenceType.FEEL_PROVISION).build());
             }
 
         }
 
         competences.add(Competence.builder()
                 .dateCompetence(endDate)
-                .type(2)
+                .type(CompetenceType.INSTALLMENT_PAYMENT)
                 .installment(Installment.builder().number(INSTALLMENTS)
                         .build())
                 .build());
