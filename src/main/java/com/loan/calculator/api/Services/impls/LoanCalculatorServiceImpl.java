@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static com.loan.calculator.api.utils.AppConstants.*;
+
 @Service
 public class LoanCalculatorServiceImpl implements LoanCalculatorService {
 
@@ -34,11 +36,11 @@ public class LoanCalculatorServiceImpl implements LoanCalculatorService {
         LocalDate andDate = requestLoanCalculator.getEndDate();
 
         if (andDate.isBefore(startDate)) {
-            throw new AppException(HttpStatus.FORBIDDEN, "A data final deve ser maior que a data inicial");
+            throw new AppException(HttpStatus.FORBIDDEN, MESSAGE_EXCEPTION_DATE_END);
         }
 
         if (firstPayment.isAfter(andDate)) {
-            throw new AppException(HttpStatus.FORBIDDEN, "A data de primeiro pagamento deve ser maior que a data inicial e menor que a data final");
+            throw new AppException(HttpStatus.FORBIDDEN, MESSAGE_EXCEPTION_DATE_START);
         }
 
         List<Competence> competences = new ArrayList<>();
