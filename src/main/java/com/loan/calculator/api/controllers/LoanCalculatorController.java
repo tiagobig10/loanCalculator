@@ -6,10 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping
@@ -19,7 +16,9 @@ public class LoanCalculatorController {
     private LoanCalculatorService loanCalculatorService;
 
     @PostMapping("/api/v1/loan-calculator")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<?> loanCalculator(@Valid @RequestBody RequestLoanCalculator requestLoanCalculator) {
+
         return new ResponseEntity<>(loanCalculatorService.generateLoanCalculator(requestLoanCalculator), HttpStatus.CREATED);
     }
 

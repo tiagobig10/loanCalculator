@@ -21,23 +21,25 @@ import static com.loan.calculator.api.utils.AppConstants.MESSAGE_EXCEPTION_DATE_
 
 @Service
 public class LoanCalculatorServiceImpl implements LoanCalculatorService {
+    private int INSTALLMENTS = 120;
+    private double BASE_DAY = 360;
+    private int PERCENT = 0;
 
     @Override
     public LoanResponse generateLoanCalculator(RequestLoanCalculator requestLoanCalculator) {
         UUID resultId = UUID.randomUUID();
-        int INSTALLMENTS = 120;
-        int PERCENT = requestLoanCalculator.getInterestRate();
-        double BASE_DAY = 360;
+        this.PERCENT = requestLoanCalculator.getInterestRate();
 
         LocalDate startDate = requestLoanCalculator.getStartDate();
         LocalDate firstPayment = requestLoanCalculator.getFirstPayment();
         LocalDate andDate = requestLoanCalculator.getEndDate();
 
-        if (andDate.isBefore(startDate)) {
+
+        if (!andDate.isAfter(startDate)) {
             throw new AppException(HttpStatus.FORBIDDEN, MESSAGE_EXCEPTION_DATE_END);
         }
 
-        if (firstPayment.isAfter(andDate)) {
+        if (!firstPayment.isAfter(startDate) && !firstPayment.isAfter(andDate)) {
             throw new AppException(HttpStatus.FORBIDDEN, MESSAGE_EXCEPTION_DATE_START);
         }
 
@@ -45,7 +47,7 @@ public class LoanCalculatorServiceImpl implements LoanCalculatorService {
 
         double accumulated = 0;
         double balance = requestLoanCalculator.getLoanAmount();
-        double installmentValue = requestLoanCalculator.getLoanAmount() / (double) INSTALLMENTS;
+        double installmentValue = requestLoanCalculator.getLoanAmount() / (double) this.INSTALLMENTS;
 
         List<Competence> generateCompetencies = generateCompetencies(startDate, firstPayment, andDate, INSTALLMENTS);
 
@@ -69,7 +71,7 @@ public class LoanCalculatorServiceImpl implements LoanCalculatorService {
                 LocalDate start = generateCompetencies.get(index - 1).getDateCompetence();
                 LocalDate end = generateCompetencies.get(index).getDateCompetence();
 
-                double calculatorFeel = calculator(balance, calcPeriod(start, end), PERCENT, BASE_DAY);
+                double calculatorFeel = calculator(balance, calcPeriod(start, end));
 
                 feel.setProvision(doubleToLong(calculatorFeel));
                 feel.setAccumulated(doubleToLong(calculatorFeel));
@@ -84,7 +86,7 @@ public class LoanCalculatorServiceImpl implements LoanCalculatorService {
                 LocalDate start = generateCompetencies.get(index - 1).getDateCompetence();
                 LocalDate end = generateCompetencies.get(index).getDateCompetence();
 
-                double calculatorFeel = calculator(balance + accumulated, calcPeriod(start, end), PERCENT, BASE_DAY);
+                double calculatorFeel = calculator(balance + accumulated, calcPeriod(start, end));
                 feel.setPaid(doubleToLong(accumulated + calculatorFeel));
 
                 Installment installment = competence.getInstallment();
@@ -115,9 +117,8 @@ public class LoanCalculatorServiceImpl implements LoanCalculatorService {
         return loanResponse;
     }
 
-
-    private double calculator(double value, int days, int percent, double base_day) {
-        return (Math.pow(((percent / 100.0) + 1), ((days) / base_day)) - 1) * (value + 0);
+    private double calculator(double value, int days) {
+        return (Math.pow(((this.PERCENT / 100.0) + 1), ((days) / this.BASE_DAY)) - 1) * (value + 0);
     }
 
     private int calcPeriod(LocalDate start, LocalDate end) {
@@ -125,7 +126,7 @@ public class LoanCalculatorServiceImpl implements LoanCalculatorService {
     }
 
     private long doubleToLong(double value) {
-        return Long.parseLong(String.format("%.2f", value).replace(",", ""));
+        return Long.parseLong(String.format("%.0f", value).replace(",", ""));
     }
 
     private List<Competence> generateCompetencies(LocalDate startDate, LocalDate firstPayment, LocalDate endDate, int INSTALLMENTS) {
@@ -133,7 +134,19 @@ public class LoanCalculatorServiceImpl implements LoanCalculatorService {
         GenerateDate generateDate = new GenerateDate();
         List<Competence> competences = new ArrayList<>();
 
-        for (int i = 0; i < period.getMonths(); i++) {
+        int periodValue = period.getMonths();
+
+        if (periodValue == 0) {
+            var dayOfMonth = generateDate.dayOfMonth(
+                    startDate.getDayOfMonth(),
+                    startDate.getMonthValue() - 1,
+                    0,
+                    startDate.getYear()
+            );
+            competences.add(Competence.builder().dateCompetence(dayOfMonth).type(CompetenceType.INITIAL_COMPETENCE).build());
+        }
+
+        for (int i = 0; i < periodValue; i++) {
             var dayOfMonth = generateDate.dayOfMonth(
                     startDate.getDayOfMonth(),
                     startDate.getMonthValue() - 1,
