@@ -16,7 +16,7 @@ Este projeto foi desenvolvido utilizando **Java 17** com **Spring Boot 3** .
 | Function | Descrição |
 | :--- | :--- |
 | `calculateInterest_ShouldCalculateCorrectlyFor30Days` | Deve calcular os juros corretamente para 30 dias a 10% a.a |
-| `validateDates_ShouldThrowExceptionWhenEndDateIsNotAfterStartDate` | Deve lançar exceção quando a data final não for depois da data inicial`. |
+| `validateDates_ShouldThrowExceptionWhenEndDateIsNotAfterStartDate` | Deve lançar exceção quando a data final não for depois da data inicial. |
 
 ## Detalhes da Implementação
 
