@@ -63,7 +63,7 @@ class LoanCalculatorServiceImplTest {
     @Test
     @DisplayName("Deve lançar exceção quando a data final não for depois da data inicial")
     void validateDates_ShouldThrowExceptionWhenEndDateIsNotAfterStartDate() throws Exception {
-        // ARRANGE
+        // RANGE
         LocalDate startDate = LocalDate.of(2024, 1, 1);
         LocalDate endDate = LocalDate.of(2024, 2, 1);
         LocalDate firstDate = LocalDate.of(2024, 1, 1);
@@ -78,7 +78,7 @@ class LoanCalculatorServiceImplTest {
                 () -> {
                     validateDatesMethod.invoke(service, startDate, firstDate, endDate);
                 },
-                "Deveria lançar AppException quando a data final for igual à inicial"
+                "Deveria lançar Exception quando a data final for igual à inicial"
         );
 
     }
