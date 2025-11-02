@@ -29,7 +29,7 @@ O corpo da requisição deve ser um objeto JSON.
 | `startDate` | `LocalDate` | A data de início do cálculo | Sim | `2024-01-01` |
 | `endDate` | `LocalDate` | A data final do cálculo  | Sim | `2034-01-01` |
 | `firstPayment` | `LocalDate` |  A data do primeiro pagamento de parcela  | Sim | `2024-01-15` |
-| `loanAmount` | `Interger` |  O valor do empréstimo  | Sim | `140000` |
+| `loanAmount` | `Long` |  O valor do empréstimo  | Sim | `14000000` |
 | `interestRate` | `Interger` |  A taxa de juros em porcentagem a ser aplicada no empréstimo  | Sim | `7` |
 
 **Exemplo de Requisição:**
@@ -39,7 +39,7 @@ O corpo da requisição deve ser um objeto JSON.
     "startDate": "2024-01-01",
     "endDate": "2034-01-01",
     "firstPayment": "2024-02-15",
-    "loanAmount": 140000,
+    "loanAmount": 14000000,
     "interestRate": 7
 }
 ```
