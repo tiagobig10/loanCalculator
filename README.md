@@ -45,7 +45,7 @@ O corpo da requisição deve ser um objeto JSON.
 ```
 
 ## Testes Unitários
-| Function | Descrição |
-| :--- | :--- |
-| `calculateInterest_ShouldCalculateCorrectlyFor30Days` | Deve calcular os juros corretamente para 30 dias a 10% a.a |
-| `validateDates_ShouldThrowExceptionWhenEndDateIsNotAfterStartDate` | Deve lançar exceção quando a data final não for depois da data inicial. |
+| Function                                                          | Descrição |
+|:------------------------------------------------------------------| :--- |
+| `calculateInterestShouldCalculateCorrectlyFor30Days`              | Deve calcular os juros corretamente para 30 dias a 10% a.a |
+| `validateDatesShouldThrowExceptionWhenEndDateIsNotAfterStartDate` | Deve lançar exceção quando a data final não for depois da data inicial. |
