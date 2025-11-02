@@ -10,7 +10,13 @@ https://d159modh3rr22x.cloudfront.net/api/v1/loan-calculator
 Serviço de Cálculo de Empréstimos
 
 ## Tecnologias
-Este projeto foi desenvolvido utilizando **Java 17** com **Spring Boot 3**.
+Este projeto foi desenvolvido utilizando **Java 17** com **Spring Boot 3** .
+
+## Testes Unitários
+| Function | Descrição |
+| :--- | :--- |
+| `calculateInterest_ShouldCalculateCorrectlyFor30Days` | Deve calcular os juros corretamente para 30 dias a 10% a.a |
+| `validateDates_ShouldThrowExceptionWhenEndDateIsNotAfterStartDate` | Deve lançar exceção quando a data final não for depois da data inicial`. |
 
 ## Detalhes da Implementação
 
