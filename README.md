@@ -3,12 +3,12 @@ Pedro Tiago
 
 ## Endpoint
 
-### `POST /generate-qrcode`
+### `POST /api/v1/loan-calculator`
 
-Gera um QR Code no formato SVG a partir do conteúdo e tamanho fornecidos no corpo da requisição.
+Serviço de Cálculo de Empréstimos
 
 ## Tecnologias
-Este projeto foi desenvolvido utilizando **Java** com **Spring Boot 3**.
+Este projeto foi desenvolvido utilizando **Java 17** com **Spring Boot 3**.
 
 ## Detalhes da Implementação
 
@@ -20,26 +20,24 @@ Este projeto foi desenvolvido utilizando **Java** com **Spring Boot 3**.
 
 ### Request Body
 
-O corpo da requisição deve ser um objeto JSON contendo o texto a ser codificado e o tamanho desejado para o lado do QR Code em pixels.
+O corpo da requisição deve ser um objeto JSON.
 
 | Campo | Tipo | Descrição | Obrigatório | Exemplo |
 | :--- | :--- | :--- | :--- | :--- |
-| `content` | `String` | O texto ou URL que será codificado no QR Code. | Sim | `"https://www.exemplo.com"` |
-| `size` | `Integer` | O tamanho (lado) desejado do QR Code em pixels. | Sim | `256` |
+| `startDate` | `LocalDate` | A data de início do cálculo | Sim | `2024-01-01` |
+| `endDate` | `LocalDate` | A data final do cálculo  | Sim | `2034-01-01` |
+| `firstPayment` | `LocalDate` |  A data do primeiro pagamento de parcela  | Sim | `2034-01-01` |
+| `loanAmount` | `Interger` |  O valor do empréstimo  | Sim | `140000` |
+| `interestRate` | `Interger` |  A taxa de juros em porcentagem a ser aplicada no empréstimo  | Sim | `7` |
 
 **Exemplo de Requisição:**
 
 ```json
 {
-  "content": "www.site.com.br",
-  "size": 300
+    "startDate": "2024-01-01",
+    "endDate": "2034-01-01",
+    "firstPayment": "2024-02-15",
+    "loanAmount": 140000,
+    "interestRate": 7
 }
 ```
-
-**Exemplo de Response:**
-
-```json
-{
-  "content": "<svg></svg>r",
-  "size": 300
-}
