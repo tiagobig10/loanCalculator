@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class LoanResponse {
     private String loanId;
-    private int loanAmount;
+    private long loanAmount;
     private int interestRate;
     private List<Competence> competences;
 

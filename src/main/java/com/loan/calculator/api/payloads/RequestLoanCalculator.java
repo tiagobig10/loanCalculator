@@ -21,7 +21,7 @@ public class RequestLoanCalculator {
     private LocalDate firstPayment;
 
     @NotNull(message = "Valor do empréstimo é obrigatório")
-    private Integer loanAmount;
+    private Long loanAmount;
 
     @NotNull(message = "Taxa de juros é obrigatório")
     private Integer interestRate;

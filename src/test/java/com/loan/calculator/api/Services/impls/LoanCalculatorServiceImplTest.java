@@ -39,7 +39,7 @@ class LoanCalculatorServiceImplTest {
                         LocalDate.now(),
                         LocalDate.now().plusMonths(2),
                         LocalDate.now().plusMonths(1),
-                        100000,
+                        100000L,
                         10
                 )
         );
