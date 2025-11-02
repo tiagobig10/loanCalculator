@@ -39,7 +39,7 @@ O corpo da requisição deve ser um objeto JSON.
     "startDate": "2024-01-01",
     "endDate": "2034-01-01",
     "firstPayment": "2024-02-15",
-    "loanAmount": 140000,
+    "loanAmount": 14000000,
     "interestRate": 7
 }
 ```
