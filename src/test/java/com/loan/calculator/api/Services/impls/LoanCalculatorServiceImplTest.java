@@ -33,14 +33,13 @@ class LoanCalculatorServiceImplTest {
         );
         calculateInterestMethod.setAccessible(true);
 
-        // Inicializa a taxa de juros
         service.generateLoanCalculator(
                 new RequestLoanCalculator(
                         LocalDate.now(),
                         LocalDate.now().plusMonths(2),
                         LocalDate.now().plusMonths(1),
                         100000L,
-                        10
+                        10 // 10 expectedInterest
                 )
         );
 
@@ -52,7 +51,6 @@ class LoanCalculatorServiceImplTest {
         double exponent = days / 360.0;
         expectedInterest = (Math.pow(base, exponent) - 1) * principalValue;
 
-        // Invoca o método privado
         Double result = (Double) calculateInterestMethod.invoke(service, principalValue, days);
 
         assertEquals(expectedInterest, result, 0.0001, "O cálculo de juros para 30 dias está incorreto.");
@@ -62,7 +60,7 @@ class LoanCalculatorServiceImplTest {
 
     @Test
     @DisplayName("Deve lançar exceção quando a data final não for depois da data inicial")
-    void validateDates_ShouldThrowExceptionWhenEndDateIsNotAfterStartDate() throws Exception {
+    void validateDatesShouldThrowExceptionWhenEndDateIsNotAfterStartDate() throws Exception {
         // RANGE
         LocalDate startDate = LocalDate.of(2024, 1, 1);
         LocalDate endDate = LocalDate.of(2024, 2, 1);
@@ -80,8 +78,10 @@ class LoanCalculatorServiceImplTest {
                 },
                 "Deveria lançar Exception quando a data final for igual à inicial"
         );
-
     }
+
+
+
 
 
 
