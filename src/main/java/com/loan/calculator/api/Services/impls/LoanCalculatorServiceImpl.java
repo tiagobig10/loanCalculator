@@ -50,7 +50,14 @@ public class LoanCalculatorServiceImpl implements LoanCalculatorService {
 
             principal.setBalance(doubleToLong(balance));
             competence.setPrincipal(principal);
+
+
             competence.setOutstandingBalance(doubleToLong(balance));
+            if (competenceIndex > 0 ) {
+                LocalDate periodEnd = generateCompetencies.get(competenceIndex).getDateCompetence();
+                double calculatorFeel = calculateInterest(balance, calcPeriod(startDate, periodEnd));
+                competence.setOutstandingBalance(doubleToLong(balance + calculatorFeel));
+            }
 
             if (competence.getType() == CompetenceType.INITIAL_COMPETENCE) {
                 competence.setLoanAmount(requestLoanCalculator.getLoanAmount());
@@ -116,7 +123,7 @@ public class LoanCalculatorServiceImpl implements LoanCalculatorService {
             throw new AppException(HttpStatus.FORBIDDEN, MESSAGE_EXCEPTION_DATE_START);
         }
 
-        if (!firstPaymentDate.isBefore(endDate)){
+        if (!firstPaymentDate.isBefore(endDate)) {
             throw new AppException(HttpStatus.FORBIDDEN, MESSAGE_EXCEPTION_DATE_FIRST);
         }
     }
